@@ -1,0 +1,13 @@
+env: "local"
+# storage configuration variables
+db:
+  user: "postgres"
+  # password from envVar POSTGRES_PASSWORD
+  address: "localhost:5432"
+  name: "passworddb"
+  # encryption key from envVar POSTGRES_KEY 
+
+http_server:
+  address: "localhost:8082"
+  timeout: 4s
+  idle_timeout: 60s
