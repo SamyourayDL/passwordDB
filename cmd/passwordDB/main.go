@@ -34,24 +34,31 @@ func main() {
 	// _, _ = secret, storage
 	// fmt.Printf("%x\n", secret)
 
-	resp, err := storage.GetPass("Bob", "")
+	resp, err := storage.GetPass("Alice", "")
 	if err != nil {
 		log.Error("failed to GetPass", "err", err.Error())
 		os.Exit(1)
 	}
 	fmt.Println(resp)
 
-	err = storage.AddUser("Alice")
-	if err != nil {
-		log.Error("failed to AddUser", "err", err.Error())
-		os.Exit(1)
-	}
+	// err = storage.AddUser("Alice")
+	// if err != nil {
+	// 	log.Error("failed to AddUser", "err", err.Error())
+	// 	os.Exit(1)
+	// }
 
-	err = storage.AddPassword("Alice", "1211990", "sber", "banks")
+	// err = storage.AddPassword("Alice", "1211990", "sber", "banks")
+	// if err != nil {
+	// 	log.Error("failed to AddUser", "err", err.Error())
+	// 	os.Exit(1)
+	// }
+
+	rowsDeleted, err := storage.Delete("Alice", "")
 	if err != nil {
-		log.Error("failed to AddUser", "err", err.Error())
+		log.Error("failed to delete user", "err", err.Error())
 		os.Exit(1)
 	}
+	fmt.Println(rowsDeleted)
 
 	log.Info("storage has been successfully inited")
 

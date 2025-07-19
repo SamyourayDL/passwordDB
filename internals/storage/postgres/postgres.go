@@ -141,4 +141,52 @@ func (s *Storage) AddPassword(user, password, service_name, category string) err
 	return nil
 }
 
-func (s *Storage) Delete(user, service string) {}
+func (s *Storage) Delete(user, service string) (int64, error) {
+	const fn = "internals.storage.postgres.Delete"
+
+	qUserId := `SELECT id FROM users WHERE name=$1`
+
+	row := s.db.QueryRow(qUserId, user)
+	var userId int
+	if err := row.Scan(&userId); err != nil {
+		return 0, fmt.Errorf("%s: %w", fn, err)
+	}
+
+	if service == "" {
+		qPassCnt := "SELECT COUNT(id) FROM passwords WHERE user_id=$1"
+
+		row := s.db.QueryRow(qPassCnt, userId)
+		var userPassCnt int
+		if err := row.Scan(&userPassCnt); err != nil {
+			return 0, fmt.Errorf("%s: %w", fn, err)
+		}
+
+		q := "DELETE FROM users WHERE name=$1"
+
+		res, err := s.db.Exec(q, user)
+		if err != nil {
+			return 0, fmt.Errorf("%s: %w", fn, err)
+		}
+
+		rowsDeleted, err := res.RowsAffected()
+		if err != nil {
+			return 0, fmt.Errorf("%s: %w", fn, err)
+		}
+
+		return rowsDeleted + int64(userPassCnt), nil
+	}
+
+	q := "DELETE FROM passwords WHERE user_id=$1 AND service_name=$2"
+
+	res, err := s.db.Exec(q, userId, service)
+	if err != nil {
+		return 0, fmt.Errorf("%s: %w", fn, err)
+	}
+
+	rowsDeleted, err := res.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("%s: %w", fn, err)
+	}
+
+	return rowsDeleted, nil
+}

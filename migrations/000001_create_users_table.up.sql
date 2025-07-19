@@ -1,5 +1,5 @@
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(30) NOT NULL
+    name VARCHAR(30) UNIQUE
 );
