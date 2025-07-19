@@ -16,17 +16,17 @@ func Encrypt(plaintext, key []byte) ([]byte, error) {
 		return nil, fmt.Errorf("%s: %w", fn, err)
 	}
 
-	gcm, err := cipher.NewGCM(block)
+	aesgcm, err := cipher.NewGCM(block)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", fn, err)
 	}
 
-	nonce := make([]byte, gcm.NonceSize())
+	nonce := make([]byte, aesgcm.NonceSize())
 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
 		return nil, fmt.Errorf("%s: %w", fn, err)
 	}
 
-	return append(nonce, gcm.Seal(nil, nonce, plaintext, nil)...), nil
+	return append(nonce, aesgcm.Seal(nil, nonce, plaintext, nil)...), nil
 }
 
 func Decrypt(ciphertext, key []byte) ([]byte, error) {
@@ -37,16 +37,16 @@ func Decrypt(ciphertext, key []byte) ([]byte, error) {
 		return nil, fmt.Errorf("%s: %w", fn, err)
 	}
 
-	gcm, err := cipher.NewGCM(block)
+	aesgcm, err := cipher.NewGCM(block)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", fn, err)
 	}
 
-	if gcm.NonceSize() > len(ciphertext) {
+	if aesgcm.NonceSize() > len(ciphertext) {
 		return nil, fmt.Errorf("too short ciphertext")
 	}
 
-	nonce, ciphertext := ciphertext[:gcm.NonceSize()], ciphertext[gcm.NonceSize():]
+	nonce, ciphertext := ciphertext[:aesgcm.NonceSize()], ciphertext[aesgcm.NonceSize():]
 
-	return gcm.Open(nil, nonce, ciphertext, nil)
+	return aesgcm.Open(nil, nonce, ciphertext, nil)
 }
