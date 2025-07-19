@@ -11,7 +11,7 @@ import (
 
 type Storage struct {
 	db  *sql.DB
-	key string
+	key []byte
 }
 
 type PassResponse struct {
@@ -39,27 +39,27 @@ func New(cfg *config.DB) (*Storage, error) {
 	}, nil
 }
 
-func (s *Storage) GetPass(user, service string) ([]PassResponse, error) {
-	const fn = "internals.storage.postgres.GetPass"
+// func (s *Storage) GetPass(user, service string) ([]PassResponse, error) {
+// 	const fn = "internals.storage.postgres.GetPass"
 
-	var queryConstraint string
-	if service != "" {
-		queryConstraint = " AND service_name == ?"
-	}
+// 	var queryConstraint string
+// 	if service != "" {
+// 		queryConstraint = " AND service_name == ?"
+// 	}
 
-	stmt, err := s.db.Prepare(`
-		SELECT service_name, secret_enc
-		FROM passwords
-		JOIN users
-		ON passwords.user_id = users.id
-		WHERE name == ?
-	` + queryConstraint)
-	if err != nil {
-		return nil, fmt.Errorf("%s: %w", fn, err)
-	}
-	defer stmt.Close()
+// 	stmt, err := s.db.Prepare(`
+// 		SELECT service_name, secret_enc
+// 		FROM passwords
+// 		JOIN users
+// 		ON passwords.user_id = users.id
+// 		WHERE name == ?
+// 	` + queryConstraint)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("%s: %w", fn, err)
+// 	}
+// 	defer stmt.Close()
 
-	if service != "" {
-		stmt.Exec()
-	}
-}
+// 	if service != "" {
+// 		stmt.Exec()
+// 	}
+// }

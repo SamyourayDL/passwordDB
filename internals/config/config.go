@@ -26,7 +26,7 @@ type DB struct {
 	Password string `env:"POSTGRES_PASSWORD" env-required:"true"`
 	Address  string `yaml:"address" env-default:"localhost:8082"`
 	Name     string `yaml:"name" env-required:"true"`
-	Key      string `env:"POSTGRES_KEY" env-default:"0123456789abcdef0123456789abcdef"`
+	Key      []byte `env:"POSTGRES_KEY" env-default:"0123456789abcdef0123456789abcdef"`
 }
 
 const (

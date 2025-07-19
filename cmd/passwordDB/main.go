@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"os"
 	"password-db/internals/config"
+	"password-db/internals/lib/logger/slogpretty"
 	"password-db/internals/storage/postgres"
-	"password-db/lib/logger/slogpretty"
 )
 
 const (
@@ -27,6 +27,7 @@ func main() {
 	storage, err := postgres.New(&cfg.DB)
 	if err != nil {
 		log.Error("failed to init storage", "err", err)
+		os.Exit(1)
 	}
 	_ = storage
 	log.Info("storage has been successfully inited")
