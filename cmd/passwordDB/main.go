@@ -26,10 +26,33 @@ func main() {
 
 	storage, err := postgres.New(&cfg.DB)
 	if err != nil {
-		log.Error("failed to init storage", "err", err)
+		log.Error("failed to init storage", "err", err.Error())
 		os.Exit(1)
 	}
-	_ = storage
+
+	// secret, _ := crypto.Encrypt([]byte("lagoflash"), cfg.Key)
+	// _, _ = secret, storage
+	// fmt.Printf("%x\n", secret)
+
+	resp, err := storage.GetPass("Bob", "")
+	if err != nil {
+		log.Error("failed to GetPass", "err", err.Error())
+		os.Exit(1)
+	}
+	fmt.Println(resp)
+
+	err = storage.AddUser("Alice")
+	if err != nil {
+		log.Error("failed to AddUser", "err", err.Error())
+		os.Exit(1)
+	}
+
+	err = storage.AddPassword("Alice", "1211990", "sber", "banks")
+	if err != nil {
+		log.Error("failed to AddUser", "err", err.Error())
+		os.Exit(1)
+	}
+
 	log.Info("storage has been successfully inited")
 
 	//router
