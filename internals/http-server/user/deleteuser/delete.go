@@ -13,7 +13,7 @@ import (
 
 type DelResponse struct {
 	response.Response
-	RowsAffected int64
+	RowsAffected int64 `json:"rows_affected"`
 }
 
 func New(log *slog.Logger, s *postgres.Storage) http.HandlerFunc {

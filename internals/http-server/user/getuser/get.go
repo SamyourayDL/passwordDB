@@ -14,7 +14,7 @@ import (
 
 type GetResponse struct {
 	resp.Response
-	Passwords []postgres.PassResponse `json:"passwords"`
+	Passwords []postgres.PassResponse `json:"passwords,omitempty"`
 }
 
 func New(log *slog.Logger, s *postgres.Storage) http.HandlerFunc {
