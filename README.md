@@ -13,7 +13,7 @@ Simple password storage with functionality to add and delete users and their pas
 ## 📘 API
 
 Документация доступна:
-- [Redoc](https://samyouraydl.github.io/passwordDB)
+- [Swagger-file](https://samyouraydl.github.io/passwordDB/)
 
 ## Methods
 - `POST /user/{user_name}` — register user
