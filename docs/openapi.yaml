@@ -1,44 +1,225 @@
 openapi: 3.0.0
 info:
-  title: Password Manager API
+  title: Password Management API
   version: 1.0.0
-  description: API для управления паролями
-
-servers:
-  - url: https://example.com/api
-
+  description: API for managing users and their passwords.
 paths:
-  /api/register:
+  /user/{user_name}:
     post:
-      summary: Регистрация
+      summary: Add a new user
+      parameters:
+        - name: user_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User creation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUserResponse'
+    get:
+      summary: Get all passwords for a user
+      parameters:
+        - name: user_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of passwords
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordListResponse'
+    delete:
+      summary: Delete a user
+      parameters:
+        - name: user_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User deletion status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteUserResponse'
+
+  /password/{user_name}:
+    post:
+      summary: Add a password for a user
+      parameters:
+        - name: user_name
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              required: [username, password]
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/AddPasswordRequest'
       responses:
-        '200':
-          description: Успешная регистрация
-  /api/login:
-    post:
-      summary: Логин
+        "200":
+          description: Password addition status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPasswordResponse'
+    get:
+      summary: Get password for a specific service
+      parameters:
+        - name: user_name
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
+        description: Service name to filter by
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              required: [username, password]
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/ServiceRequest'
       responses:
-        '200':
-          description: Успешный вход
+        "200":
+          description: Passwords for the service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResponse'
+    delete:
+      summary: Delete a password for a service
+      parameters:
+        - name: user_name
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Service name to delete
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+      responses:
+        "200":
+          description: Password deletion status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePasswordResponse'
+
+components:
+  schemas:
+    AddUserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        error:
+          type: string
+      example:
+        status: OK
+    AddPasswordRequest:
+      type: object
+      properties:
+        password:
+          type: string
+        service_name:
+          type: string
+      required:
+        - password
+        - service_name
+      example:
+        password: lagoflash123
+        service_name: appleID
+    AddPasswordResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        Error:
+          type: string
+      example:
+        status: OK
+    PasswordItem:
+      type: object
+      properties:
+        Service:
+          type: string
+        Password:
+          type: string
+    PasswordListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        Error:
+          type: string
+        passwords:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasswordItem'
+      example:
+        status: OK
+        passwords:
+          - Service: gmail
+            Password: abracadabra
+          - Service: github
+            Password: lagoflash
+    PasswordResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        passwords:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasswordItem'
+      example:
+        status: OK
+        passwords:
+          - Service: bank
+            Password: veryStrongPass
+    ServiceRequest:
+      type: object
+      properties:
+        service_name:
+          type: string
+      required:
+        - service_name
+      example:
+        service_name: bank
+    DeleteUserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        Error:
+          type: string
+        RowsAffected:
+          type: integer
+      example:
+        status: OK
+        rows_affected: 3
+    DeletePasswordResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        Error:
+          type: string
+        rows_affected:
+          type: integer
+      example:
+        status: OK
+        rows_affected: 1
