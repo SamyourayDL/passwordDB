@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: Password Manager API
+  version: 1.0.0
+  description: API для управления паролями
+
+servers:
+  - url: https://example.com/api
+
+paths:
+  /api/register:
+    post:
+      summary: Регистрация
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Успешная регистрация
+  /api/login:
+    post:
+      summary: Логин
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Успешный вход
