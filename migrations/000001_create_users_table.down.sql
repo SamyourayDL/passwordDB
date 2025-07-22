@@ -1,1 +1,3 @@
+DROP TABLE IF EXISTs passwords;
 DROP TABLE IF EXISTS users;
+
