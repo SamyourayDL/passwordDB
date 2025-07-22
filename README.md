@@ -15,7 +15,7 @@ Simple password storage with functionality to add and delete users and their pas
 Документация доступна:
 - [Redoc](https://samyouraydl.github.io/passwordDB)
 
-## M
+## Methods
 - `POST /user/{user_name}` — register user
 - `POST /password/{user_name}` — add password to a user
 - `GET /user/{user_name}` — get all user's passwords
