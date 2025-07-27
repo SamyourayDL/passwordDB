@@ -4,11 +4,10 @@ Simple password storage with functionality to add and delete users and their pas
 
 # TechStack 
 - Go
-- slog
-- sqlx
+  - slog  
+  - AES-256
+  - chi
 - PostgreSQL(Docker container)
-- AES-256
-- chi
 
 ## 📘 API
 
