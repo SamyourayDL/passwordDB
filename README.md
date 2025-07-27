@@ -12,7 +12,7 @@ Simple password storage with functionality to add and delete users and their pas
 
 ## 📘 API
 
-Документация доступна:
+Docs:
 - [Swagger-file](https://samyouraydl.github.io/passwordDB/)
 
 ## Methods
